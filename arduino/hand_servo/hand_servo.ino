@@ -1,17 +1,23 @@
-// we first import our libraries
-#include "cvzone.h"    // this help us to communicate with python over the serial com port
+#include "cvzone.h"
 #include "Servo.h"
-Servo servo;                         // create our servo object
-SerialData data(1, 3);               // create our serial object
-int value[2];                        // create an array to store our received values
+
+Servo servo[5];
+SerialData data(1, 5);
+int value[5];
 
 void setup() {
-  data.begin(9600);   // begin our serial communication
-  servo.attach(9);    // connect our servo pin
+  data.begin(9600);
+  servo[0].attach(3);
+  servo[1].attach(5);
+  servo[2].attach(6);
+  servo[3].attach(9);
+  servo[4].attach(10);
 }
 
 void loop() {
-  data.Get(value);         // read the value from python and store it in value
-  servo.write(value[0]);   // only one servo is attached, so use the first value
+  data.Get(value);
+  for (int i = 0; i < 5; i++) {
+    servo[i].write(value[i]);
+  }
   delay(30);
 }
