@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 from cvzone.HandTrackingModule import HandDetector
-from cvzone.SerialModule import SerialObject
+import serial
 
 cap = cv2.VideoCapture(0)
 detector = HandDetector(detectionCon=0.8)
-arduino = SerialObject("COM3")
+arduino = serial.Serial("COM3", 9600)
 
 FINGER_TIPS  = [4, 8, 12, 16, 20]
 FINGER_BASES = [2, 5,  9, 13, 17]
@@ -28,7 +28,7 @@ while True:
     if len(hands) == 1:
         angles = get_angles(hands[0]["lmList"])
         if angles != last_angles:
-            arduino.sendData(angles)
+            arduino.write(bytes(angles))
             last_angles = angles
     cv2.imshow('image', image)
     cv2.waitKey(1)
